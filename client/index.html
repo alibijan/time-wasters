@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Multiplayer Game Version 0</title>
+        
+        <link rel="icon" href="img/favicon.png">
+        <link rel="stylesheet" href="styles/main.css">
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <!-- BODY CONTENT -->
+        <div class="controls-wrapper">
+            <ul id="events"></ul>
+            <div class="controls">
+                <div class="chat-wrapper">
+                    <form id="chat-form">
+                        <input id="chat" autocomplete="off" title="chat" />
+                        <button id="say">Say</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Socket.IO -->
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!-- CLIENT -->
+        <script src="src/client.js"></script>
+    </body>
+</html>
