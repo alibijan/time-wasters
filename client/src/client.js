@@ -2,6 +2,37 @@
 let name = [];
 
 // functions
+const capitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const createError = (parent) => {
+    // idea: at the start of parent function of whichever function is calling this,
+    //       reset/remove this
+    const parentType = parent.nodeName;
+
+    // Do not proceed if error is already created
+    if( parentType === 'INPUT' ) {
+        parent.style.border = '1px solid #DA3838';
+
+        let errorCheck = document.getElementById('name--error');
+    
+        if( !errorCheck ) {
+            // create error message element
+            const errorElement = document.createElement('span');
+            const errorParent = parent.parentElement;
+
+            // styling error element
+            errorElement.setAttribute('id', `${parent.id}--error`);
+
+            errorElement.innerHTML = `<i class="fas fa-exclamation"></i> ${capitalize(parent.id)} cannot be blank!`;
+
+            errorParent.appendChild(errorElement);
+
+            // console.log(errorParent);
+        }
+    }
+}
 const username = (setting) => {
     // goal:
     // - take info from box
@@ -21,12 +52,13 @@ const username = (setting) => {
     // name = 'renly';
     
     const setName = ()  => {
-        console.log(`input value: ${nameInput.value}`);
-        console.log(`name: ${name}`);
+        // console.log(`input value: ${nameInput.value}`);
+        // console.log(`name: ${name}`);
         if( nameInput.value === '' ) {
             // if name is blank
             // TODO: create error
             console.log('ERROR: name is blank!!');
+            createError(nameInput)
             success = false;
         } else if( nameInput.value === name ) {
             console.log('ERROR: name is the same!!');
@@ -68,6 +100,7 @@ const onChatSubmitted = (sock) => (e) => {
     
     // socketio
     sock.emit('message', text);
+    console.log(name);
 };
 
 const popup = (name, functionality) => {
@@ -97,6 +130,7 @@ const popup = (name, functionality) => {
             inputWrapper = document.createElement('div'),
             inputForm = document.createElement('form'),
             inputLabel = document.createElement('p'),
+            inputNameWrapper = document.createElement('div'),
             inputName = document.createElement('input');
 
         input.setAttribute('class', 'popup-input');
@@ -104,6 +138,7 @@ const popup = (name, functionality) => {
         inputForm.setAttribute('id', 'input-form');
         inputLabel.setAttribute('class', 'input-label');
         inputLabel.innerHTML = 'Choose a username:';
+        inputNameWrapper.setAttribute('class', 'input-name--wrapper');
         inputName.setAttribute('id', 'name');
         inputName.setAttribute('autocomplete', 'off');
 
@@ -130,7 +165,8 @@ const popup = (name, functionality) => {
         input.appendChild(inputWrapper);
         inputWrapper.appendChild(inputForm);
         inputForm.appendChild(inputLabel);
-        inputForm.appendChild(inputName);
+        inputForm.appendChild(inputNameWrapper)
+        inputNameWrapper.appendChild(inputName);
 
         popup.appendChild(action);
 
@@ -222,6 +258,15 @@ function track(sock) {
                 break;
             case 'name--button':
                 popup('', 'open');
+
+                break;
+            case 'name':
+                // animation example
+                // const animate = document.getElementById('name').animate([
+                //     {transform: 'translate(0)'},
+                //     {transform: 'translate(100px, 100px)'},
+                //     {transform: 'translate(0)'}
+                // ], 500);
 
                 break;
             default:

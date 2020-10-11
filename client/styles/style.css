@@ -54,7 +54,7 @@ html ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid #767676;
   overflow-y: scroll;
 }
 
@@ -97,13 +97,13 @@ html .popup-wrapper {
 
 html .popup-container {
   background-color: white;
-  border-radius: 10%;
+  border-radius: 10px;
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  width: auto;
+  width: 50%;
 }
 
 html .popup-close {
@@ -115,9 +115,58 @@ html .popup-close {
   width: auto;
 }
 
+html .popup-input .input-name--wrapper {
+  position: relative;
+}
+
 html .popup-input .input-label {
   text-align: center;
   margin: 0 0 1rem;
+}
+
+html .popup-input #input-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 25vh;
+}
+
+html .popup-input #name--error {
+  background-color: #e1b2b2;
+  border-radius: 14px;
+  color: #da3838;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+html .popup-input #name {
+  border: 1px solid #c2c4c6;
+  border-radius: 2px;
+  font-size: 1.0rem;
+  padding: 5px 10px;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  width: 100%;
+  -webkit-transition: border 100ms linear;
+  transition: border 100ms linear;
+}
+
+html .popup-input #name:focus {
+  border: 1px solid #1e1e1e;
 }
 
 html .popup-action {
@@ -135,15 +184,19 @@ html .popup-action .action-wrapper button:last-child {
 }
 
 html .controls-wrapper {
-  background-color: white;
-  width: 400px;
+  background-color: #ffffff;
+  width: 50%;
   margin: 20px auto;
-  border: 1px solid lightgrey;
+  border: 1px solid #767676;
 }
 
 html .controls-wrapper #events .welcome-message {
   text-align: center;
   margin: 0;
+}
+
+html .controls-wrapper #events .username {
+  font-weight: bold;
 }
 
 html .chat-wrapper {
@@ -157,12 +210,20 @@ html .chat-wrapper form {
 }
 
 html .chat-wrapper form input {
+  border: 1px solid #c2c4c6;
+  border-radius: 2px;
   font-size: 1.0rem;
   margin: 0 10px 0 0;
   padding: 0 5px;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+  -webkit-transition: border 250ms linear;
+  transition: border 250ms linear;
+}
+
+html .chat-wrapper form input:focus {
+  border: 1px solid #1e1e1e;
 }
 
 html .chat-wrapper form button {
@@ -170,6 +231,6 @@ html .chat-wrapper form button {
 }
 
 html #events {
-  height: 50vh;
+  height: 75vh;
 }
 /*# sourceMappingURL=style.css.map */

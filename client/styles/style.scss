@@ -53,7 +53,7 @@ html {
         list-style: none;
         margin: 0;
         padding: 0;
-        border-bottom: 1px solid lightgrey;
+        border-bottom: 1px solid #767676;
         overflow-y: scroll;
     }
     li {
@@ -98,7 +98,7 @@ html {
         }
         &-container {
             background-color: white;
-            border-radius: 10%;
+            border-radius: 10px;
 
             // padding: 2rem 0 1rem;
 
@@ -106,7 +106,7 @@ html {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: auto;
+            width: 50%;
         }
         &-close {            
             position: absolute;
@@ -120,9 +120,50 @@ html {
         }
 
         &-input {
+            .input-name--wrapper {
+                position: relative;
+            }
             .input-label {
                 text-align: center;
                 margin: 0 0 1rem;
+            }
+
+            #input-form {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                height: 25vh;
+            }
+            #name--error {
+                background-color: #e1b2b2;
+                border-radius: 14px;
+                color: #da3838;
+                font-size: 12px;
+                font-weight: bold;
+
+                padding: 5px 10px;
+
+                position: absolute;
+                top: 50%;
+                right: 5px;
+
+                transform: translateY(-50%);
+            }
+            #name {
+                border: 1px solid #c2c4c6;
+                border-radius: 2px;
+                font-size: 1.0rem;
+                // margin: 0 10px 0 0;
+                padding: 5px 10px;
+                flex-grow: 1;
+                width: 100%;
+
+                transition: border 100ms linear;
+
+                &:focus {
+                    border: 1px solid #1e1e1e;
+                }
             }
         }
         &-action {
@@ -142,19 +183,18 @@ html {
     }
 
     .controls-wrapper {
-        background-color: rgb(255,  255, 255);
-        width: 400px;
+        background-color: #ffffff;
+        width: 50%;
         margin: 20px auto;
-        border: 1px solid lightgrey;
+        border: 1px solid #767676;
 
         #events {
             .welcome-message {
                 text-align: center;
                 margin: 0;
-
-                &--disabled {
-
-                }
+            }
+            .username {
+                font-weight: bold;
             }
         }
     }
@@ -166,10 +206,19 @@ html {
             display: flex;
 
             input {
+                border: 1px solid #c2c4c6;
+                border-radius: 2px;
                 font-size: 1.0rem;
                 margin: 0 10px 0 0;
                 padding: 0 5px;
                 flex-grow: 1;
+
+                transition: border 250ms linear;
+
+                &:focus {
+                    border: 1px solid #1e1e1e;
+                    // box-shadow: 0 0 10px #719ece;
+                }
             }
             button {
                 width: 80px;
@@ -178,6 +227,6 @@ html {
     }
 
     #events {
-        height: 50vh;
+        height: 75vh;
     }
 }
