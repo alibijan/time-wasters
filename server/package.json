@@ -1,6 +1,9 @@
 {
   "name": "mp-game",
   "version": "0.0.0",
+  "engines": {
+    "node": "12.16.0"
+  },
   "description": "Simple MP game made with Javascript",
   "main": "server.js",
   "scripts": {

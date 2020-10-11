@@ -1,11 +1,10 @@
-const e = require("express");
-const express = require("express");
-const socketio = require("socket.io");
+const express = require('express');
+const socketio = require('socket.io');
 
 // App
 const port = 3000;
 const app = express();
-const http = require("http").createServer(app);
+const http = require('http').createServer(app);
 
 app.use(express.static(`${__dirname}/../client`));
 
@@ -14,13 +13,10 @@ const io = socketio(http);
 io.on('connection', (sock) => {
     let previousName;
     let currentName;
-    // io.emit('message', 'hey guiz :) whatsup');
-    // sock.emit('message', 'New user connected!!!');
-    // io.emit('newUser', 'You are connected.');
     sock.on('name', (name) => {
         previousName = name[name.length - 2];
         currentName = name[name.length - 1];
-        console.log(`server log: name: ${name[name.length - 1]}`);
+        // console.log(`server log name: ${name[name.length - 1]}`);
         if( previousName === undefined ) {
             sock.broadcast.emit('message', `User has changed name to ${currentName}`);
         } else {

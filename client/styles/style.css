@@ -135,7 +135,7 @@ html .popup-input #input-form {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: 25vh;
+  height: 20vh;
 }
 
 html .popup-input #name--error {
@@ -144,7 +144,7 @@ html .popup-input #name--error {
   color: #da3838;
   font-size: 12px;
   font-weight: bold;
-  padding: 5px 10px;
+  padding: 3px 10px;
   position: absolute;
   top: 50%;
   right: 5px;

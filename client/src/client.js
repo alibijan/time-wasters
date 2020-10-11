@@ -6,45 +6,57 @@ const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const createError = (parent) => {
-    // idea: at the start of parent function of whichever function is calling this,
-    //       reset/remove this
-    const parentType = parent.nodeName;
+const createError = (parent, functionality) => {
+    const create = () => {
+        const parentType = parent.nodeName;
 
-    // Do not proceed if error is already created
-    if( parentType === 'INPUT' ) {
-        parent.style.border = '1px solid #DA3838';
+        console.log(`function is:: ${functionality}`);
 
-        let errorCheck = document.getElementById('name--error');
-    
-        if( !errorCheck ) {
-            // create error message element
-            const errorElement = document.createElement('span');
-            const errorParent = parent.parentElement;
+        // Do not proceed if error is already created
+        if( parentType === 'INPUT' ) {
+            parent.style.border = '1px solid #DA3838';
 
-            // styling error element
-            errorElement.setAttribute('id', `${parent.id}--error`);
+            let errorCheck = document.getElementById('name--error');
+        
+            if( !errorCheck ) {
+                // create error message element
+                const errorElement = document.createElement('span');
+                const errorParent = parent.parentElement;
 
-            errorElement.innerHTML = `<i class="fas fa-exclamation"></i> ${capitalize(parent.id)} cannot be blank!`;
+                // styling error element
+                errorElement.setAttribute('id', `${parent.id}--error`);
 
-            errorParent.appendChild(errorElement);
+                errorElement.innerHTML = `<i class='fas fa-exclamation'></i> ${capitalize(parent.id)} cannot be blank!`;
 
-            // console.log(errorParent);
+                errorParent.appendChild(errorElement);
+
+                // console.log(errorParent);
+            }
         }
+    };
+
+    const remove = () => {
+        // only proceed if error is already created
+        let error = document.getElementById(`${parent.id}--error`);
+        // console.log('remove remove');
+        // console.log(errorCheck);
+
+        if( error ) {
+            error.remove();
+
+            if( parent.nodeName === 'INPUT' ) {
+                parent.style.border = '1px solid #c2c4c6';
+            };
+        }
+    };
+
+    if( functionality === 'create') {
+        create();
+    } else if( functionality === 'remove' || functionality === 'close' ) {
+        remove();
     }
 }
 const username = (setting) => {
-    // goal:
-    // - take info from box
-    // - - if empty
-    // - - - do not close popup, tell them to set valid name.
-    // - - if valid
-    // - - - update name variable,
-    // - - - close popup,
-    // maybe ???
-    // - rerun welcome
-    // alert that name was changed in chat
-
     // const popupWrapper = 
     const nameInput = document.getElementById('name');
     // console.log('username ran');
@@ -58,7 +70,7 @@ const username = (setting) => {
             // if name is blank
             // TODO: create error
             console.log('ERROR: name is blank!!');
-            createError(nameInput)
+            createError(nameInput, 'create')
             success = false;
         } else if( nameInput.value === name ) {
             console.log('ERROR: name is the same!!');
@@ -100,7 +112,7 @@ const onChatSubmitted = (sock) => (e) => {
     
     // socketio
     sock.emit('message', text);
-    console.log(name);
+    // console.log(name);
 };
 
 const popup = (name, functionality) => {
@@ -210,7 +222,7 @@ const welcome = (name) => {
         nameButton.innerHTML = 'SET NAME';
         
         // set log welcome message
-        log(`<p class="${classes}">Welcome,<br>Set your username.</p>`);
+        log(`<p class='${classes}'>Welcome,<br>Set your username.</p>`);
 
         // TODO: On first login, make popup page automatically open
         setTimeout(() => {
@@ -231,7 +243,7 @@ const welcome = (name) => {
         if( welcomeMessage ) {
             welcomeMessage.innerHTML = `Welcome, ${name[name.length - 1]}.<br>You are connected.`;
         } else if( !welcomeMessage ) {
-            // log(`<p class="${classes}">Welcome, ${name}.<br>You are connected.</p>`);
+            // log(`<p class='${classes}'>Welcome, ${name}.<br>You are connected.</p>`);
         }
     }
 };
@@ -261,6 +273,8 @@ function track(sock) {
 
                 break;
             case 'name':
+                const nameInput = document.getElementById('name');
+                createError(nameInput, 'close');
                 // animation example
                 // const animate = document.getElementById('name').animate([
                 //     {transform: 'translate(0)'},
@@ -277,7 +291,7 @@ function track(sock) {
 
 (() => {
     welcome();
-    // log('<p style="text-align:center; margin:0;">Welcome,<br>You are now connected.</p>');
+    // log('<p style='text-align:center; margin:0;'>Welcome,<br>You are now connected.</p>');
 
     const sock = io();
 
