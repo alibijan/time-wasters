@@ -2,7 +2,7 @@ const express = require('express');
 const socketio = require('socket.io');
 
 // App
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 const http = require('http').createServer(app);
 
@@ -11,6 +11,7 @@ app.use(express.static(`${__dirname}/../client`));
 const io = socketio(http);
 
 io.on('connection', (sock) => {
+    // user name
     let previousName;
     let currentName;
     sock.on('name', (name) => {
@@ -23,7 +24,9 @@ io.on('connection', (sock) => {
             sock.broadcast.emit('message', `${previousName} has changed their name to ${currentName}`);
         }
     });
+    // user connected
     sock.broadcast.emit('newUser', 'New user connected.');
+    // messages
     sock.on('message', (text) => {
         // console.log(text);
         if( currentName ) {
@@ -37,5 +40,5 @@ http.on('error', (err) => {
 });
 
 http.listen(port, () => {
-    console.log('server is ready');
+    console.log(`server is ready, listening on ${port}`);
 });
