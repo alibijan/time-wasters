@@ -1,5 +1,16 @@
 // global var
 let name = [];
+// let currentName = name;
+// let currentName = Array.isArray(name) === true && name[name.length - 1] === undefined ? name[name.length - 1] : name;
+let currentName;
+
+if( Array.isArray(name) && name[name.length - 1] === undefined ) {
+    console.log('true :D D');
+    console.log(name.length);
+    currentName = name[name.length];
+} else {
+    console.log('false :( ( (');
+}
 
 // functions
 const capitalize = (string) => {
@@ -57,11 +68,25 @@ const createError = (parent, functionality) => {
     }
 }
 const username = (setting) => {
-    // const popupWrapper = 
     const nameInput = document.getElementById('name');
-    // console.log('username ran');
     let success = false;
     // name = 'renly';
+    // console.log('storage name:');
+    // console.log(localStorage.getItem('username'));
+
+    const storedName = () => {
+        if( localStorage.getItem('username') ) {
+            console.log(`local storage check stored name`);
+            console.log(localStorage.getItem('username'));
+
+            name.push(localStorage.getItem('username'));
+            console.log('testing name stored!!:::');
+            console.log(name);
+            console.log(Array.isArray(name));
+            // sock.emit('name', localStorage.getItem('username'));
+            success = true;
+        }
+    }
     
     const setName = ()  => {
         // console.log(`input value: ${nameInput.value}`);
@@ -73,23 +98,33 @@ const username = (setting) => {
             createError(nameInput, 'create')
             success = false;
         } else if( nameInput.value === name ) {
+            // name is the same as input
             console.log('ERROR: name is the same!!');
             success = false;
         } else {
+            // name change success
             name.push(nameInput.value);
+            console.log('testing name:::');
+            console.log(name);
+            console.log(currentName);
+            console.log(Array.isArray(name));
+            console.log(nameInput.value);
+            // localStorage.setItem('username', currentName);
             success = true;
         }
     };
 
     if( setting === 'set' || setting === 'setName' ) {
         setName();
+    } else if( setting === 'stored') {
+        storedName();
     }
 
     if( success === true ) {
         // console.log(name);
         popup('', 'close');
-        log(`You have changed your name to: ${name[name.length - 1]}`);
-        welcome(name);
+        log(`You have changed your name to: ${currentName}`);
+        welcome('', name);
         return name;
     }
 };
@@ -123,6 +158,7 @@ const popup = (name, functionality) => {
         // popup wrapper
         const popupWrapper = document.createElement('div');
         popupWrapper.setAttribute('class', 'popup-wrapper');
+        popupWrapper.setAttribute('id', 'popup--wrapper');
 
         // popup container
         const popupContainer = document.createElement('div');
@@ -192,7 +228,9 @@ const popup = (name, functionality) => {
         const body = document.body;
         const popup = document.querySelector('.popup-wrapper');
 
-        body.removeChild(popup);
+        if( popup ) {
+            body.removeChild(popup);
+        }
     };
 
     if( functionality === 'create' || functionality === 'add' || functionality === 'open' ) {
@@ -202,18 +240,14 @@ const popup = (name, functionality) => {
     }
 };
 
-const welcome = (name) => {
+const welcome = (sock, name) => {
     // Welcome message variations
 
     // // TODO: Make classes into array and easier to expand upon and use in the future.
     // classes = ['welcome-message','welcome-message--disabled'];
     const nameButton = document.getElementById('name--button');
     let classes = 'welcome-message welcome-message--disabled';
-    // let username = username();
 
-    // console.log(username());
-
-    console.log(name);
     if( !name ) {
         // User has not set name
         // TODO: Make it obvious which button to press when it tells you to set your name here
@@ -223,6 +257,12 @@ const welcome = (name) => {
         
         // set log welcome message
         log(`<p class='${classes}'>Welcome,<br>Set your username.</p>`);
+
+         // check if cached name exists
+        console.log(`test 0 lS: ${localStorage.getItem('username')}`);
+        console.log(`test 0 name: ${name}`);
+
+        username('stored');
 
         // TODO: On first login, make popup page automatically open
         setTimeout(() => {
@@ -241,9 +281,11 @@ const welcome = (name) => {
         
         // check if already exists
         if( welcomeMessage ) {
-            welcomeMessage.innerHTML = `Welcome, ${name[name.length - 1]}.<br>You are connected.`;
+            console.log(`test 2: ${name}`);
+            console.log(`test 2: ${currentName}`);
+            welcomeMessage.innerHTML = `Welcome, ${currentName}.<br>You are connected.`;
         } else if( !welcomeMessage ) {
-            // log(`<p class='${classes}'>Welcome, ${name}.<br>You are connected.</p>`);
+            log(`<p class='${classes}'>Welcome, ${currentName}.<br>You are connected.</p>`);
         }
     }
 };
@@ -254,6 +296,10 @@ function track(sock) {
         // console.log(clickedTarget);
 
         switch (clickedTarget) {
+            case 'popup--wrapper':
+                popup('', 'close');
+
+                break
             case 'popup--close':
                 popup('', 'close');
 
@@ -264,7 +310,6 @@ function track(sock) {
                 break;
             case 'name--accept':
                 username('set');
-                console.log(`username: ${username()}`);
                 sock.emit('name', name);
 
                 break;
@@ -290,10 +335,10 @@ function track(sock) {
 }
 
 (() => {
-    welcome();
-    // log('<p style='text-align:center; margin:0;'>Welcome,<br>You are now connected.</p>');
-
     const sock = io();
+    
+    welcome(sock);
+    // log('<p style='text-align:center; margin:0;'>Welcome,<br>You are now connected.</p>');
 
     sock.on('newUser', log);
     sock.on('message', log);
