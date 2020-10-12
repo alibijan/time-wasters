@@ -19,13 +19,19 @@ io.on('connection', (sock) => {
         currentName = name[name.length - 1];
         // console.log(`server log name: ${name[name.length - 1]}`);
         if( previousName === undefined ) {
-            sock.broadcast.emit('message', `User has changed name to ${currentName}`);
+            // sock.broadcast.emit('message', `User has changed name to ${currentName}`);
+            sock.broadcast.emit('newUser', `${currentName} has connected`);
         } else {
             sock.broadcast.emit('message', `${previousName} has changed their name to ${currentName}`);
         }
     });
+
+    io.emit('message', 'version 1');
+
     // user connected
-    sock.broadcast.emit('newUser', 'New user connected.');
+    // sock.broadcast.emit('newUser', 'New user connected.');
+    console.log('New user has connected');
+
     // messages
     sock.on('message', (text) => {
         // console.log(text);
