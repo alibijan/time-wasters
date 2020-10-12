@@ -17,7 +17,13 @@ io.on('connection', (sock) => {
     sock.on('name', (name) => {
         previousName = name[name.length - 2];
         currentName = name[name.length - 1];
-        // console.log(`server log name: ${name[name.length - 1]}`);
+        // console.log(`prev log name: ${previousName}`);
+        // console.log(`curr log name: ${currentName}`);
+
+        // if name is set and user disconnects, send message.
+        sock.on('disconnect', () => {
+            sock.broadcast.emit('message', `${currentName} has disconnected.`);
+        })
         if( previousName === undefined ) {
             // sock.broadcast.emit('message', `User has changed name to ${currentName}`);
             sock.broadcast.emit('newUser', `${currentName} has connected`);
@@ -30,7 +36,7 @@ io.on('connection', (sock) => {
 
     // user connected
     // sock.broadcast.emit('newUser', 'New user connected.');
-    console.log('New user has connected');
+    // console.log('New user has connected');
 
     // messages
     sock.on('message', (text) => {

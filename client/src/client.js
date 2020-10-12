@@ -10,7 +10,7 @@ const createError = (parent, functionality) => {
     const create = () => {
         const parentType = parent.nodeName;
 
-        console.log(`function is:: ${functionality}`);
+        // console.log(`function is:: ${functionality}`);
 
         // Do not proceed if error is already created
         if( parentType === 'INPUT' ) {
@@ -263,8 +263,8 @@ function track(sock) {
 
                 break;
             case 'name--accept':
-                // console.log(`pre-set: ${username()}`);
                 username('set');
+                console.log(`username: ${username()}`);
                 sock.emit('name', name);
 
                 break;
