@@ -17,8 +17,10 @@ io.on('connection', (sock) => {
     sock.on('name', (name) => {
         previousName = name[name.length - 2];
         currentName = name[name.length - 1];
-        // console.log(`prev log name: ${previousName}`);
-        // console.log(`curr log name: ${currentName}`);
+
+        console.log(`log name: ${name}`);
+        console.log(`prev log name: ${previousName}`);
+        console.log(`curr log name: ${currentName}`);
 
         // if name is set and user disconnects, send message.
         sock.on('disconnect', () => {
