@@ -225,12 +225,18 @@ html .error {
   padding: 3px 10px;
   position: absolute;
   top: 50%;
-  right: 5px;
+  height: calc(100% - 10px);
+  overflow: hidden;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
 }
 
+html #canvas {
+  width: 90%;
+  height: 50vh;
+}
+
 html #events {
-  height: 75vh;
+  height: 25vh;
 }
 /*# sourceMappingURL=style.css.map */

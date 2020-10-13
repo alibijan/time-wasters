@@ -237,12 +237,24 @@ html {
 
         position: absolute;
         top: 50%;
-        right: 5px;
+
+        height: calc(100% - 10px);
+
+        overflow: hidden;
 
         transform: translateY(-50%);
+
+        span {
+            // position: absolute;
+        }
+    }
+
+    #canvas {
+        width: 90%;
+        height: 50vh;
     }
 
     #events {
-        height: 75vh;
+        height: 25vh;
     }
 }

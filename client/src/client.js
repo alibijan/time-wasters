@@ -2,6 +2,101 @@
 let name = [];
 
 // functions
+const canvas = () => {
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = 'green';
+    ctx.fillRect(100, 25, 100, 100);
+
+    // console.log(canvas);
+}
+
+// TODO: animate things
+const animate = (element, animType, animLength) => {
+    const elementType = element.getAttribute('type');
+    const elemText = element.childNodes[element.childNodes.length - 1];
+    const initialWidth = `${element.offsetWidth - 5}px`;
+
+    
+    // Animations
+    const openLeft = () => { 
+        elemText.style.position = `absolute`;
+        elemText.style.width = initialWidth;
+
+        // set opacity
+        element.animate([
+            {opacity: '0'},
+            {opacity: '1'}
+        ], animLength * 0.25)
+
+        // draw out effect
+        element.animate([
+            {width: '0'},
+            {width: `${initialWidth}`}
+        ], animLength * 0.7);
+        element.style.width = initialWidth;
+
+        // ! spin
+        elemText.childNodes[element.childNodes.length - 1].animate([
+            {transform: 'rotate(-180deg)'},
+            {transform: 'rotate(-360deg)'}
+        ], animLength);
+        elemText.childNodes[element.childNodes.length - 1].animate([
+            {marginRight: '10px'},
+            {marginRight: '8px'},
+            {marginRight: '5px'},
+            {marginRight: '0'},
+        ], animLength);
+    };
+
+    const closeRight = () => {
+        // ! spin
+        elemText.childNodes[element.childNodes.length - 1].animate([
+            {transform: 'rotate(0deg)'},
+            {transform: 'rotate(180deg)'}
+        ], animLength);
+        elemText.childNodes[element.childNodes.length - 1].animate([
+            {marginRight: '0'},
+            {marginRight: '5px'},
+            {marginRight: '8px'},
+            {marginRight: '10px'}
+        ], animLength);
+
+        // draw out effect
+        element.animate([
+            {width: `${initialWidth}`},
+            {width: '0'}
+        ], animLength * 0.7);
+        element.style.width = initialWidth;
+
+        console.log(animLength - (animLength * 0.25));
+
+        // set opacity
+        setTimeout(() => {
+            // console.log('weirdo timing');
+            element.animate([
+                {opacity: '1'},
+                {opacity: '0'}
+            ], animLength * 0.25)
+        }, animLength - (animLength * 0.25));
+        
+    };
+
+    if( animType === 'openLeft' )  {
+        openLeft();
+    } else if( animType === 'closeRight' ) {
+        closeRight();
+    }
+
+    // animation example
+    // const animate = document.getElementById('name').animate([
+    //     {transform: 'translate(0)'},
+    //     {transform: 'translate(100px, 100px)'},
+    //     {transform: 'translate(0)'}
+    // ], 500);
+}
+
 const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -22,25 +117,48 @@ const createError = (element, functionality, errorText) => {
 
                 
                 // styling error element
+                const elementType = element.nodeName.toLowerCase();
+                // console.log(elementType);
                 errorElement.setAttribute('class', `error ${element.id}-error`);
+                errorElement.setAttribute('type', `${elementType}`);
                 errorElement.setAttribute('id', `${element.id}--error`);
                 
-                errorElement.innerHTML = `<i class='fas fa-exclamation'></i> ${capitalize(element.id)} ${errorText}`;
+                errorElement.innerHTML = `<span class='error--text'><i class='fas fa-exclamation'></i> ${capitalize(element.id)} ${errorText}</span>`;
+
                 
                 // append to element below input
                 errorElement.style.right = `${(parent.offsetWidth - element.offsetWidth) + 5}px`
-                parent.insertBefore(errorElement, element.nextSibling);
                 parent.style.position = 'relative';
+                parent.insertBefore(errorElement, element.nextSibling);
+
+                // animate
+                // console.log(errorElement.childNodes[errorElement.childNodes.length - 1]);
+                // errorElement.childNodes[errorElement.childNodes.length - 1].style.width = '150px';
+
+                // animate(errorElement, 'openLeft', 350)
+                animate(errorElement, 'openLeft', 450)
             }
         }
     };
 
     const remove = () => {
         // only proceed if error is already created
+        // TODO: make it so text is called in at the bottom where functionality cals remove
+        //       instead of calling it from the original function here
         let error = document.getElementById(`${element.id}--error`);
         
         if( error ) {
-            error.remove();
+            console.log('amo;mate close');
+            animate(error, 'closeRight', 350);
+            // error.remove();
+
+            setTimeout(() => {
+                console.log('remove');
+                error.remove();
+            }, 220);
+
+            // setTimeout(() => {
+            // }, 3500);
 
             if( element.nodeName === 'INPUT' ) {
                 element.style.border = '1px solid #c2c4c6';
@@ -54,6 +172,7 @@ const createError = (element, functionality, errorText) => {
         remove();
     }
 }
+
 const username = (setting) => {
     const nameInput = document.getElementById('name');
     let success = false;
@@ -118,6 +237,7 @@ const popup = (name, functionality) => {
         // popup wrapper
         const popupWrapper = document.createElement('div');
         popupWrapper.setAttribute('class', 'popup-wrapper');
+        popupWrapper.setAttribute('id', 'popup--wrapper');
 
         // popup container
         const popupContainer = document.createElement('div');
@@ -208,7 +328,7 @@ const welcome = (name) => {
 
     // console.log(username());
 
-    console.log(name);
+    // console.log(name);
     if( !name ) {
         // User has not set name
         // TODO: Make it obvious which button to press when it tells you to set your name here
@@ -249,12 +369,19 @@ function track(sock) {
         const clickedTargetClass = e.target.classList;
         const clickedType = e.target.nodeName;
 
+        // if you click on an error, remove it
         if( clickedTargetClass.contains('error') === true ) {
-            console.log('clickedTargetClass');
-            console.log(clickedTargetClass.contains('error'));
+            // console.log('clickedTargetClass');
+            // console.log(clickedTargetClass.contains('error'));
             e.target.previousSibling.focus();
             createError(e.target.previousSibling, 'remove');
+        } else if( clickedTargetClass.contains('error--text') ) {
+            console.log('true');
+            console.log(e.target.parentElement.previousSibling);
+            e.target.parentElement.previousSibling.focus();
+            createError(e.target.parentElement.previousSibling, 'remove');
         }
+
         switch (clickedType) {
             case 'INPUT':
                 createError(e.target, 'remove');
@@ -274,13 +401,17 @@ function track(sock) {
                 popup('', 'close');
 
                 break;
+            case 'popup--wrapper':
+                popup('', 'close');
+
+                break;
             case 'name--cancel':
                 popup('', 'close');
 
                 break;
             case 'name--accept':
                 username('set');
-                console.log(`username: ${username()}`);
+                // console.log(`username: ${username()}`);
                 sock.emit('name', name);
 
                 break;
@@ -291,12 +422,6 @@ function track(sock) {
             case 'name':
                 const nameInput = document.getElementById('name');
                 createError(nameInput, 'close');
-                // animation example
-                // const animate = document.getElementById('name').animate([
-                //     {transform: 'translate(0)'},
-                //     {transform: 'translate(100px, 100px)'},
-                //     {transform: 'translate(0)'}
-                // ], 500);
 
                 break;
             default:
@@ -307,6 +432,8 @@ function track(sock) {
 
 (() => {
     welcome();
+
+    canvas();
 
     const sock = io();
 

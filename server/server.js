@@ -32,7 +32,7 @@ io.on('connection', (sock) => {
         }
     });
 
-    io.emit('message', 'version 1');
+    // io.emit('message', 'version 1');
 
     // user connected
     // sock.broadcast.emit('newUser', 'New user connected.');
