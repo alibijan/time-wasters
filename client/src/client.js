@@ -13,7 +13,7 @@ const createError = (element, functionality, errorText) => {
         if( element.nodeName === 'INPUT' ) { // input elem
             element.style.border = '1px solid #DA3838';
 
-            let errorCheck = document.getElementById(`${parent.id}--error`);
+            let errorCheck = document.getElementById(`${element.id}--error`);
         
             // Do not proceed if error is already created
             if( !errorCheck ) {
