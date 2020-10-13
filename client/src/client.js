@@ -70,11 +70,8 @@ const animate = (element, animType, animLength) => {
         ], animLength * 0.7);
         element.style.width = initialWidth;
 
-        console.log(animLength - (animLength * 0.25));
-
         // set opacity
         setTimeout(() => {
-            // console.log('weirdo timing');
             element.animate([
                 {opacity: '1'},
                 {opacity: '0'}
@@ -88,13 +85,6 @@ const animate = (element, animType, animLength) => {
     } else if( animType === 'closeRight' ) {
         closeRight();
     }
-
-    // animation example
-    // const animate = document.getElementById('name').animate([
-    //     {transform: 'translate(0)'},
-    //     {transform: 'translate(100px, 100px)'},
-    //     {transform: 'translate(0)'}
-    // ], 500);
 }
 
 const capitalize = (string) => {
@@ -132,10 +122,6 @@ const createError = (element, functionality, errorText) => {
                 parent.insertBefore(errorElement, element.nextSibling);
 
                 // animate
-                // console.log(errorElement.childNodes[errorElement.childNodes.length - 1]);
-                // errorElement.childNodes[errorElement.childNodes.length - 1].style.width = '150px';
-
-                // animate(errorElement, 'openLeft', 350)
                 animate(errorElement, 'openLeft', 450)
             }
         }
@@ -148,7 +134,6 @@ const createError = (element, functionality, errorText) => {
         let error = document.getElementById(`${element.id}--error`);
         
         if( error ) {
-            console.log('amo;mate close');
             animate(error, 'closeRight', 350);
             // error.remove();
 
