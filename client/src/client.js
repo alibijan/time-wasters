@@ -6,7 +6,7 @@ const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const createError = (element, functionality) => {
+const createError = (element, functionality, errorText) => {
     const create = () => {
         let parent = element.parentElement;
 
@@ -25,7 +25,7 @@ const createError = (element, functionality) => {
                 errorElement.setAttribute('class', `error ${element.id}-error`);
                 errorElement.setAttribute('id', `${element.id}--error`);
                 
-                errorElement.innerHTML = `<i class='fas fa-exclamation'></i> ${capitalize(element.id)} cannot be blank`;
+                errorElement.innerHTML = `<i class='fas fa-exclamation'></i> ${capitalize(element.id)} ${errorText}`;
                 
                 // append to element below input
                 errorElement.style.right = `${(parent.offsetWidth - element.offsetWidth) + 5}px`
@@ -55,16 +55,13 @@ const createError = (element, functionality) => {
     }
 }
 const username = (setting) => {
-    // const popupWrapper = 
     const nameInput = document.getElementById('name');
     let success = false;
     
     const setName = ()  => {
         if( nameInput.value === '' ) {
             // if name is blank
-            // TODO: create error
-            console.log('ERROR: name is blank!!');
-            createError(nameInput, 'create')
+            createError(nameInput, 'create', 'cannot be blank')
             success = false;
         } else if( nameInput.value === name ) {
             console.log('ERROR: name is the same!!');
@@ -102,7 +99,7 @@ const onChatSubmitted = (sock) => (e) => {
     const input = document.querySelector('#chat');
     const text = input.value;
     if( text === '' ) {
-        createError(input, 'create');
+        createError(input, 'create', 'cannot be blank');
     } else {
         input.value = '';
         
