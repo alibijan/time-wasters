@@ -6,46 +6,44 @@ const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const createError = (parent, functionality) => {
+const createError = (element, functionality) => {
     const create = () => {
-        const parentType = parent.nodeName;
+        let parent = element.parentElement;
 
-        // console.log(`function is:: ${functionality}`);
+        if( element.nodeName === 'INPUT' ) { // input elem
+            element.style.border = '1px solid #DA3838';
 
-        // Do not proceed if error is already created
-        if( parentType === 'INPUT' ) {
-            parent.style.border = '1px solid #DA3838';
-
-            let errorCheck = document.getElementById('name--error');
+            let errorCheck = document.getElementById(`${parent.id}--error`);
         
+            // Do not proceed if error is already created
             if( !errorCheck ) {
                 // create error message element
                 const errorElement = document.createElement('span');
-                const errorParent = parent.parentElement;
 
+                
                 // styling error element
-                errorElement.setAttribute('id', `${parent.id}--error`);
-
-                errorElement.innerHTML = `<i class='fas fa-exclamation'></i> ${capitalize(parent.id)} cannot be blank!`;
-
-                errorParent.appendChild(errorElement);
-
-                // console.log(errorParent);
+                errorElement.setAttribute('class', `error ${element.id}-error`);
+                errorElement.setAttribute('id', `${element.id}--error`);
+                
+                errorElement.innerHTML = `<i class='fas fa-exclamation'></i> ${capitalize(element.id)} cannot be blank`;
+                
+                // append to element below input
+                errorElement.style.right = `${(parent.offsetWidth - element.offsetWidth) + 5}px`
+                parent.insertBefore(errorElement, element.nextSibling);
+                parent.style.position = 'relative';
             }
         }
     };
 
     const remove = () => {
         // only proceed if error is already created
-        let error = document.getElementById(`${parent.id}--error`);
-        // console.log('remove remove');
-        // console.log(errorCheck);
-
+        let error = document.getElementById(`${element.id}--error`);
+        
         if( error ) {
             error.remove();
 
-            if( parent.nodeName === 'INPUT' ) {
-                parent.style.border = '1px solid #c2c4c6';
+            if( element.nodeName === 'INPUT' ) {
+                element.style.border = '1px solid #c2c4c6';
             };
         }
     };
@@ -59,13 +57,9 @@ const createError = (parent, functionality) => {
 const username = (setting) => {
     // const popupWrapper = 
     const nameInput = document.getElementById('name');
-    // console.log('username ran');
     let success = false;
-    // name = 'renly';
     
     const setName = ()  => {
-        // console.log(`input value: ${nameInput.value}`);
-        // console.log(`name: ${name}`);
         if( nameInput.value === '' ) {
             // if name is blank
             // TODO: create error
@@ -86,7 +80,6 @@ const username = (setting) => {
     }
 
     if( success === true ) {
-        // console.log(name);
         popup('', 'close');
         log(`You have changed your name to: ${name[name.length - 1]}`);
         welcome(name);
@@ -108,10 +101,15 @@ const onChatSubmitted = (sock) => (e) => {
 
     const input = document.querySelector('#chat');
     const text = input.value;
-    input.value = '';
+    if( text === '' ) {
+        createError(input, 'create');
+    } else {
+        input.value = '';
+        
+        // socketio
+        sock.emit('message', text);
+    }
     
-    // socketio
-    sock.emit('message', text);
     // console.log(name);
 };
 
@@ -250,10 +248,31 @@ const welcome = (name) => {
 
 function track(sock) {
     document.body.addEventListener('click', function(e) {
-        const clickedTarget = e.target.id;
-        // console.log(clickedTarget);
+        const clickedTargetID = e.target.id;
+        const clickedTargetClass = e.target.classList;
+        const clickedType = e.target.nodeName;
 
-        switch (clickedTarget) {
+        if( clickedTargetClass.contains('error') === true ) {
+            console.log('clickedTargetClass');
+            console.log(clickedTargetClass.contains('error'));
+            e.target.previousSibling.focus();
+            createError(e.target.previousSibling, 'remove');
+        }
+        switch (clickedType) {
+            case 'INPUT':
+                createError(e.target, 'remove');
+
+                break;
+        
+            default:
+                break;
+        }
+        switch (clickedTargetID) {
+            case 'chat':
+                const chatInput = document.getElementById('chat');
+                createError(chatInput, 'close');
+
+                break;
             case 'popup--close':
                 popup('', 'close');
 
@@ -291,7 +310,6 @@ function track(sock) {
 
 (() => {
     welcome();
-    // log('<p style='text-align:center; margin:0;'>Welcome,<br>You are now connected.</p>');
 
     const sock = io();
 

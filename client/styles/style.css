@@ -138,20 +138,6 @@ html .popup-input #input-form {
   height: 20vh;
 }
 
-html .popup-input #name--error {
-  background-color: #e1b2b2;
-  border-radius: 14px;
-  color: #da3838;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 3px 10px;
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-
 html .popup-input #name {
   border: 1px solid #c2c4c6;
   border-radius: 2px;
@@ -228,6 +214,20 @@ html .chat-wrapper form input:focus {
 
 html .chat-wrapper form button {
   width: 80px;
+}
+
+html .error {
+  background-color: #e1b2b2;
+  border-radius: 14px;
+  color: #da3838;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 10px;
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 
 html #events {
